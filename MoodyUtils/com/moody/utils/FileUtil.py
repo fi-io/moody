@@ -7,6 +7,7 @@ from com.moody.utils import TextUtil
 from os import listdir
 from os.path import isfile, join
 import xml.etree.ElementTree as ET
+import json
 
 def writeToFile(vocabDict, filepath):
     # function to write vocabulary to file
@@ -29,7 +30,7 @@ def readCMUQAData(filepath):
             line_sp = line.split('\t')
             # Check if line is permissible
             if TextUtil.isValidValue(line_sp[0]) and TextUtil.isValidValue(line_sp[1]) and TextUtil.isValidValue(line_sp[2]):
-                yield (' '.join(line_sp[0].split('_')), line_sp[1], unicode(line_sp[2], "utf-8"))
+                yield (' '.join(line_sp[0].split('_')), unicode(line_sp[1], "utf-8"), unicode(line_sp[2], "utf-8"))
 
 # Funstion to read the qa files of NIST xml and producing (title, ques, ans) tuples from all files of directory               
 def readNistQAData(filesDir):
@@ -47,4 +48,14 @@ def readNistQAData(filesDir):
                 ans = root[0][16][0][0].text
             if TextUtil.isValidValue(subj) and TextUtil.isValidValue(ques) and TextUtil.isValidValue(ans):
                 yield (subj, ques, ans)
-        
+                
+def readJeopardyQAData(jsonFilePath):
+    jsonFile = open(jsonFilePath)
+    json_str = ''
+    for line in jsonFile:
+        json_str = json_str + line
+    json_val = json.loads(json_str)
+    for jObj in json_val:
+        yield (jObj['category'], jObj['question'][1:-1], jObj['answer'])
+
+readJeopardyQAData('/home/brij/Documents/moody/datasets/jeopardy_data.json')

@@ -6,7 +6,7 @@ Created on 02-Jun-2014
 import re
 
 NP_WORDS = ['NULL', '', 'Question', 'Answer']  # Non-Permissible words
-ALPHABETS_REGEX = re.compile('[^a-zA-Z ]')
+ALPHABETS_REGEX = re.compile('[^a-zA-Z0-9 ]')
 
 def isValidValue(text):
     return (text and text.strip() not in NP_WORDS)

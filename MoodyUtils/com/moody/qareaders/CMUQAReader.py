@@ -20,8 +20,8 @@ symbols:
 
 VOCAB_DICT = {}  # Dictionary to hold word#ansID-p:p_score&q:q_score&r:r_score values
 VOCAB_DICT_LIMIT = 50000
-OUTPUT_DIR = '/home/brij/Documents/moody/index/cmu/S10/'
-qaFile1 = '/home/brij/Documents/moody/datasets/cmu_data/S10/question_answer_pairs.txt'
+OUTPUT_DIR = '/home/brij/Documents/moody/index/cmu/S08/'
+qaFile1 = '/home/brij/Documents/moody/datasets/cmu_data/S08/question_answer_pairs.txt'
 TEMP_FILE_PREFIX = 'moody.cmu.tempindex.'
 TEMP_FILE_COUNTER = 0
 
@@ -57,6 +57,7 @@ def processText(text, priority):
 linecount = 0
 for (title, ques, ans) in FileUtil.readCMUQAData(qaFile1):
     ans_id = MongoUtil.getAnswerID(ans)
+    MongoUtil.saveQARelation(ques, ans_id)
     
     # Work on title
     processText(title, 'p')

@@ -1,5 +1,5 @@
 '''
-Created on 01-Jun-2014
+Created on 04-Jun-2014
 
 @author: brij
 '''
@@ -20,13 +20,14 @@ symbols:
 
 VOCAB_DICT = {}  # Dictionary to hold word#ansID-p:p_score&q:q_score&r:r_score values
 VOCAB_DICT_LIMIT = 50000
-OUTPUT_DIR = '/home/brij/Documents/moody/index/nist/'
-qaFilesDir = '/home/brij/Documents/moody/datasets/nist_data/xml/'
-TEMP_FILE_PREFIX = 'moody.nist.tempindex.'
+OUTPUT_DIR = '/home/brij/Documents/moody/index/jeopardy/'
+qaFilePath = '/home/brij/Documents/moody/datasets/jeopardy_data.json'
+TEMP_FILE_PREFIX = 'moody.jeopardy.tempindex.'
 TEMP_FILE_COUNTER = 0
 
 # Function to categorize the word into proper place and priority
 def addToVocab(word, answer_id, priority_type, priority_val):
+    global TEMP_FILE_COUNTER
     if len(VOCAB_DICT) >= VOCAB_DICT_LIMIT:
         # create a temporary index file
         outfilePath = OUTPUT_DIR + TEMP_FILE_PREFIX + str(TEMP_FILE_COUNTER)
@@ -55,7 +56,7 @@ def processText(text, priority):
         
 
 linecount = 0
-for (title, ques, ans) in FileUtil.readNistQAData(qaFilesDir):
+for (title, ques, ans) in FileUtil.readJeopardyQAData(qaFilePath):
     ans_id = MongoUtil.getAnswerID(ans)
     MongoUtil.saveQARelation(ques, ans_id)
     
