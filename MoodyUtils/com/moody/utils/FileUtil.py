@@ -5,9 +5,10 @@ Created on 02-Jun-2014
 '''
 from com.moody.utils import TextUtil
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, splitext, basename
 import xml.etree.ElementTree as ET
 import json
+from subprocess import call
 
 def writeToFile(vocabDict, filepath):
     # function to write vocabulary to file
@@ -43,7 +44,7 @@ def readNistQAData(filesDir):
             subj = root[0][0].text
             ques = root[0][1].text
             ans = root[0][11].text
-            #print filename, ans
+            # print filename, ans
             if not TextUtil.isValidValue(ans) and root[0][16].__len__() > 0:
                 ans = root[0][16][0][0].text
             if TextUtil.isValidValue(subj) and TextUtil.isValidValue(ques) and TextUtil.isValidValue(ans):
@@ -58,4 +59,18 @@ def readJeopardyQAData(jsonFilePath):
     for jObj in json_val:
         yield (jObj['category'], jObj['question'][1:-1], jObj['answer'])
 
-readJeopardyQAData('/home/brij/Documents/moody/datasets/jeopardy_data.json')
+def extractPostsXml(compressedFile, outputFile):
+    call('7z x -o' + outputFile + ' ' + compressedFile + ' -y', shell=True)
+
+def getSO7zFiles(filesdir):
+    allfiles = [ join(filesdir, f) for f in listdir(filesdir) if isfile(join(filesdir, f)) and f.endswith('7z') ]
+    return allfiles
+
+def getFilenameWithoutExt(fullpath):
+    return splitext(basename(fullpath))[0]
+
+# getSO7zFiles("/home/brij/Documents/moody/datasets/stackexchange_data/")
+# extractPostsXml("/home/brij/Documents/moody/datasets/stackexchange_data/academia.stackexchange.com.7z", "/home/brij/Documents/moody/index/stackexchange/out.xml")    
+    
+    
+    
