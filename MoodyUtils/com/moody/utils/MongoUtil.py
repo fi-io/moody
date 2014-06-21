@@ -55,7 +55,7 @@ def saveSEAnswer(aid, body):
     seanswers_collection.save({'aid': aid, 'body': body})
     
 def readSEQAData():
-    for ques in sequestions_collection.find(timeout=False).batch_size(1000):
+    for ques in sequestions_collection.find(timeout=False):
         aid = ques['aid']
         ac = seanswers_collection.find_one({'aid': aid})
         if ac:

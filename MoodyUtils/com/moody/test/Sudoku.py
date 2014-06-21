@@ -5,7 +5,7 @@ Created on 04-Jun-2014
 '''
 import sys
 
-N = 2
+N = 3
 Nsq = N*N
 plen = Nsq*Nsq
 
