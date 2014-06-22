@@ -17,7 +17,7 @@ def r(a):
 
     i = a.find('0')
     if i == -1:
-        sys.exit(a)
+        return a
     
     excluded_numbers = set()
     for j in range(plen):
@@ -26,12 +26,27 @@ def r(a):
 
     for m in range(1, Nsq+1):
         if str(m) not in excluded_numbers:
-            # At this point, m is not excluded by any row, column, or block, so let's place it and recurse
-            r(a[:i] + str(m) + a[i + 1:])
+            temp = r(a[:i] + str(m) + a[i + 1:])
+            if not temp:
+                excluded_numbers.add(str(m))
+            else:
+                return temp
 
+def printSudoku(res):
+	temp = ''
+	for i in range(plen):
+		#print i, Nsq, (i+1) % Nsq
+		if (i+1) % Nsq == 0:
+			temp += res[i]
+			print temp
+			temp = ""
+		else:
+			temp += res[i] + ' '
+	
 if __name__ == '__main__':
     if len(sys.argv) == 2 and len(sys.argv[1]) == plen:
-        r(sys.argv[1])
+        printSudoku(r(sys.argv[1]))
+        
     else:
         print 'Usage: python sudoku.py puzzle'
         print '  where puzzle is an 81 character string representing the puzzle read left-to-right, top-to-bottom, and 0 is a blank'
